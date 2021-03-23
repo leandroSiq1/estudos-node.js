@@ -2,32 +2,40 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// definindo os arquivos estaticos
+// definindo o template engine
+app.set('view engine', 'ejs')
+
+
+{
+  // definindo os arquivos estaticos
 // const staticFolder = path.join(__dirname, 'views');
 // const expressStatic = express.static(staticFolder);
 // app.use(expressStatic);
-app.use(express.static(path.join(__dirname, 'views')));
+// usar apenas se nao tiver o template engine, o template engine
+// ja faz a definição de arquivos estaticos
+// app.use(express.static(path.join(__dirname, 'views')));
 
 // definindo os arquivos publicos
 // const publicFolder = path.join(__dirname, 'public');
 // const expressPublic = express.static(publicFolder);
 // app.use(expressPublic);
+}
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 
 
 
 // rotas
 app.get('/', (req, res) => {
-  res.render('views/index');
+  res.render('index', {
+    title: "Atalans | Home"
+  });
 });
 
-app.get('/sobre', (req, res) => {
-  res.send("sobre");
+app.get('/posts', (req, res) => {
+  res.render('posts', {
+    title: "Atalans | Post"
+  });
 });
-
-
 
 
 
