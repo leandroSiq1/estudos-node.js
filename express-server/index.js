@@ -23,6 +23,9 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Habilita o server para receber dados via post (formulário)
+app.use(express.urlencoded({ extended: true }));
+
 // rotas
 app.get('/', (req, res) => {
   res.render('index', {
@@ -31,10 +34,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/posts', (req, res) => {
-  fs.readFile('posts.json', (error, content) => {
+  fs.readFile('./store/posts.json', (error, content) => {
     if (error) {
       res.end(error);
-      console.lof("Error:", error);
+      console.log("Error:", error);
     } else {
       res.render('posts', {
         title: "Atalan | Posts",
@@ -43,6 +46,34 @@ app.get('/posts', (req, res) => {
     }
   });
 });
+
+
+app.get('/cadastro-posts', (req, res) => {
+  const { c } = req.query;
+
+  res.render('cadastro-posts', {
+    title: "Atalan | Cadastrar Post",
+    cadastrado: c
+  });
+});
+
+app.post('/salvar-post', (req, res) => {
+  const { title, text } = req.body;
+
+  const data = fs.readFileSync('./store/posts.json');
+  const posts = JSON.parse(data);
+  posts.push({
+    title,
+    text
+  });
+
+  const postsString = JSON.stringify(posts);
+  fs.writeFileSync('./store/posts.json', postsString)
+  
+  res.redirect('/cadastro-posts?c=1');
+});
+
+
 
 // 404 error (not found)
 app.use((req, res) => { // middleware

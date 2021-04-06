@@ -11,15 +11,26 @@
   <h1>Veja a baixo</h1>
 
   <div class="posts"> 
+
     <% posts.forEach((element) => { %> 
       <div class="post">
         <h3><%= element.title %></h3>
         <p><%= element.text %></p>
+
+        <% if (element.stars) { %>
+          <div class="stars">
+            <% for(let i = 0; i < element.stars; i++ ) { %>
+              <small><img src="https://cdn.iconscout.com/icon/free/png-256/star-2525620-2117160.png" alt=""></small>
+            <% } %>
+          </div>
+
+        <% } %>  
+        
+        <span>Author: <%= element.author %></span>
       </div>
     <% }) %>
-  </div>
 
-  <%- include("partials/footer.ejs") %>
+  </div>
 
   <%- include("partials/foot.ejs") %>
   
